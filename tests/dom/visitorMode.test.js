@@ -35,7 +35,7 @@ test("visitor controls save exact instances and update from shared state", async
   const remote = await setupRemote();
   await import("../../remote/remote-render.mjs");
   remote.translations = {VISITOR_MODE_ON: "Visitor mode: On", VISITOR_MODE_OFF: "Visitor mode: Off"};
-  document.body.innerHTML = remote.renderVisitorModePanel(true);
+  document.body.innerHTML = remote.renderMainMenu() + remote.renderVisitorModePanel();
   const actions = [];
   remote.action = (action, payload) => { actions.push({action, ...payload}); };
   const state = {enabled: false,

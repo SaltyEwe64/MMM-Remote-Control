@@ -91,6 +91,7 @@ Object.assign(Remote, {
       "main-menu": () => this.renderMainMenu(),
       "power-menu": () => this.renderPowerMenu(),
       "edit-menu": () => this.renderEditMenu(),
+      "visitor-menu": () => this.renderVisitorModePanel(),
       "settings-menu": () => this.renderSettingsMenu(),
       "classes-menu": () => this.renderClassesMenu(),
       "update-menu": () => this.renderUpdateMenu(),
@@ -104,25 +105,23 @@ Object.assign(Remote, {
   },
 
   /**
-   * Returns HTML for the main menu (navigation buttons only).
-   * @param {boolean} showSelection - Include the module selection editor
-   * @returns {string} HTML string for the main menu nav
+   * Render the dedicated visitor module selection page.
+   * @returns {string} Module selection controls
    */
-  renderVisitorModePanel (showSelection) {
+  renderVisitorModePanel () {
     const t = (key) => this.translate(key);
-    return `<section class="visitor-mode-panel">
-      <button type="button" class="button visitor-mode-toggle" aria-pressed="false" disabled>${t("VISITOR_MODE_OFF")}</button>
-      ${showSelection ? `<details><summary>${t("VISITOR_CHOOSE_MODULES")}</summary>
-        <p>${t("VISITOR_SELECTION_HELP")}</p>
-        <div data-visitor-modules></div>
-        <button type="button" class="button visitor-mode-save" disabled>${t("VISITOR_SAVE_SELECTION")}</button>
-      </details>` : `<button type="button" class="button visitor-mode-configure">${t("VISITOR_CHOOSE_MODULES")}</button>`}
+    return `<section class="menu-content visitor-mode-panel">
+      <p>${t("VISITOR_SELECTION_HELP")}</p>
+      <div data-visitor-modules></div>
+      <button type="button" class="button visitor-mode-save" disabled>${t("VISITOR_SAVE_SELECTION")}</button>
     </section>`;
   },
 
   renderMainMenu () {
     const t = (key) => this.translate(key);
-    return `${this.renderVisitorModePanel(false)}<nav class="menu-nav">
+    return `<nav class="menu-nav">
+        <button type="button" class="button visitor-mode-toggle" aria-pressed="false" disabled><span class="fa fa-fw fa-users" aria-hidden="true"></span><span class="text">${t("VISITOR_MODE_OFF")}</span></button>
+        ${navButton("visitor-modules-button", "fa-list-ul", t("VISITOR_CHOOSE_MODULES"), true, "visitor-menu")}
         ${navButton("power-button", "fa-power-off", t("SHUTDOWN_MENU_NAME"), true, "power-menu")}
         ${stackButton("edit-button", "fa-television", "fa-pencil", t("EDIT_MENU_NAME"), true, "edit-menu")}
         ${navButton("settings-button", "fa-wrench", t("CONFIGURE_MENU_NAME"), true, "settings-menu")}
@@ -341,7 +340,7 @@ Object.assign(Remote, {
   renderEditMenuContent () {
     const t = (key) => this.translate(key);
 
-    return `${this.renderVisitorModePanel(true)}<div class="menu-element-container">
+    return `<div class="menu-element-container">
         <div class="action-buttons-row">
           <div id="save-button" class="button" role="button" aria-label="${t("SAVE")}" tabindex="0">
             <span class="fa fa-fw fa-save" aria-hidden="true"></span>

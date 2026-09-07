@@ -1,4 +1,4 @@
-const CACHE_NAME = "mmm-remote-control-visitor-mode-v1";
+const CACHE_NAME = "mmm-remote-control-visitor-menu-v2";
 const urlsToCache = [
   "./remote.html",
   "./css/main.css",

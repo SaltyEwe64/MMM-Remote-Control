@@ -4,6 +4,7 @@ export const STATIC_MENU_NAMES = new Set([
   "main-menu",
   "power-menu",
   "edit-menu",
+  "visitor-menu",
   "settings-menu",
   "classes-menu",
   "update-menu",
@@ -25,9 +26,11 @@ export const MENU_SIDE_EFFECTS = {
 
     this.attachEditMenuListeners();
     this.loadVisibleModules();
-    this.loadVisitorMode();
     this.loadSettings();
 
+  },
+  "visitor-menu" () {
+    this.loadVisitorMode();
   },
   "settings-menu" () {
 

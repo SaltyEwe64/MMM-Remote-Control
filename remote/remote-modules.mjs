@@ -12,20 +12,13 @@ Object.assign(
 
     loadVisitorMode () {
       this.getData("visitorMode");
-      for (const button of document.querySelectorAll(".visitor-mode-configure")) {
-        if (button.dataset.visitorBound) {
-          continue;
-        }
 
-        button.dataset.visitorBound = "true";
-        button.addEventListener("click", () => this.navigateToMenu("edit-menu"));
-      }
     },
 
     updateVisitorModeControls (state) {
       this.visitorMode = state;
       for (const button of document.querySelectorAll(".visitor-mode-toggle")) {
-        button.textContent = state.enabled ? this.translate("VISITOR_MODE_ON") : this.translate("VISITOR_MODE_OFF");
+        (button.querySelector(".text") ?? button).textContent = state.enabled ? this.translate("VISITOR_MODE_ON") : this.translate("VISITOR_MODE_OFF");
         button.setAttribute("aria-pressed", String(state.enabled));
         button.disabled = !state.enabled && state.modules.length === 0;
         if (!button.dataset.visitorBound) {

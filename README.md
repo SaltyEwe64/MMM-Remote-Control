@@ -348,7 +348,7 @@ The existing authenticated API also supports `/api/module/<identifier>/blur`, `/
 
 ### Visitor mode
 
-On the remote main screen, **Visitor mode** switches your saved selection on or off. Open **Choose visitor modules**, tick the module instances to include, and press **Save selection**. Selecting modules does not turn the mode on. If it is already on, saving updates the active selection immediately. Saving an empty selection turns it off.
+On the remote main screen, **Visitor mode** switches your saved selection on or off. Open the separate **Choose visitor modules** menu item, tick the module instances to include, and press **Save selection**. Selecting modules does not turn the mode on. If it is already on, saving updates the active selection immediately. Saving an empty selection turns it off.
 
 The selection and on/off state are saved on the mirror in ignored `visitor-mode.json`, shared by all remote clients, and restored after restart. Turning Visitor mode off removes only preset blur; manually blurred modules stay blurred. Hide/Show and external visibility locks are unchanged. While Visitor mode covers a module, its individual blur button is disabled.
 

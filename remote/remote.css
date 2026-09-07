@@ -1360,7 +1360,8 @@ pre {
   border: 1px solid var(--glass-border);
   border-radius: var(--border-radius);
 }
-.visitor-mode-panel button {
+.visitor-mode-panel button,
+button.visitor-mode-toggle {
   font: inherit;
   color: inherit;
   background: var(--glass-bg);
