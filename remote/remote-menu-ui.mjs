@@ -11,6 +11,7 @@ const MENU_TITLE_MAP = {
   "main-menu": "TITLE",
   "power-menu": "SHUTDOWN_MENU_NAME",
   "edit-menu": "EDIT_MENU_NAME",
+  "visitor-menu": "VISITOR_CHOOSE_MODULES",
   "settings-menu": "CONFIGURE_MENU_NAME",
   "add-module-menu": "ADD_MODULE",
   "update-menu": "UPDATE_MENU_NAME",

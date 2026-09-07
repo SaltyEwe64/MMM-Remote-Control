@@ -86,5 +86,10 @@
   "MODULE_CONTROLS": "Modul-Steuerung",
   "CUSTOM_MENU": "Mein eigenes Menü",
   "BLUR": "Blur",
-  "UNBLUR": "Unblur"
+  "UNBLUR": "Unblur",
+  "VISITOR_MODE_ON": "Visitor mode: On",
+  "VISITOR_MODE_OFF": "Visitor mode: Off",
+  "VISITOR_CHOOSE_MODULES": "Choose visitor modules",
+  "VISITOR_SAVE_SELECTION": "Save selection",
+  "VISITOR_SELECTION_HELP": "Select the modules to blur when visitors arrive. Your selection is saved for next time."
 }

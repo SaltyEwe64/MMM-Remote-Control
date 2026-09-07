@@ -99,6 +99,10 @@ Object.assign(
 
           switch (payload.query.data) {
 
+            case "visitorMode":
+              this.updateVisitorModeControls(payload.data);
+              break;
+
             case "config_update":
 
               this.handleSaveConfig(payload);
@@ -221,6 +225,10 @@ Object.assign(
 
       }
       switch (notification) {
+
+        case "VISITOR_MODE_STATE":
+          this.updateVisitorModeControls(payload);
+          return;
 
         case "REFRESH":
         case "RESTART": {

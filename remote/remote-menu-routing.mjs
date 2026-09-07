@@ -4,6 +4,7 @@ export const STATIC_MENU_NAMES = new Set([
   "main-menu",
   "power-menu",
   "edit-menu",
+  "visitor-menu",
   "settings-menu",
   "classes-menu",
   "update-menu",
@@ -16,6 +17,7 @@ export const STATIC_MENU_NAMES = new Set([
 export const MENU_SIDE_EFFECTS = {
   async "main-menu" () {
 
+    this.loadVisitorMode();
     this.injectDynamicMenuButtons();
     await this.applyMainMenuVisibilityRules();
 
@@ -26,6 +28,9 @@ export const MENU_SIDE_EFFECTS = {
     this.loadVisibleModules();
     this.loadSettings();
 
+  },
+  "visitor-menu" () {
+    this.loadVisitorMode();
   },
   "settings-menu" () {
 

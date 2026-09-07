@@ -52,6 +52,7 @@ try {
 }
 const {includes} = require("./lib/utils.js");
 const configManager = require("./lib/configManager.js");
+const visitorMode = require("./lib/visitorMode.js");
 const moduleManager = require("./lib/moduleManager.js");
 const systemControl = require("./lib/systemControl.js");
 
@@ -70,6 +71,13 @@ Module = {
 module.exports = NodeHelper.create({
   // Subclass start method.
   start () {
+    this.visitorModeFile = path.join(__dirname, "visitor-mode.json");
+    try {
+      this.visitorMode = visitorMode.loadVisitorMode(this.visitorModeFile);
+    } catch (error) {
+      Log.error("Cannot load visitor mode settings", error);
+      this.visitorMode = {enabled: false, modules: []};
+    }
     this.initialized = false;
     Log.log(`Starting node helper for: ${this.name}`);
 
@@ -502,6 +510,29 @@ module.exports = NodeHelper.create({
     }
   },
 
+  getVisitorModeState () {
+    return {
+      ...(this.visitorMode ?? {enabled: false, modules: []}),
+      availableModules: (this.configData?.moduleData ?? []).filter((module) => module.position).map(({identifier, name, header, position}) => ({identifier, name, header, position}))
+    };
+  },
+
+  handleVisitorMode (query, response) {
+    this.requireLiveState(response, () => {
+      try {
+        const state = visitorMode.normalizeVisitorMode({...this.visitorMode, ...(("enabled" in query) && {enabled: query.enabled}), ...(("modules" in query) && {modules: query.modules})});
+        const available = new Set(this.getVisitorModeState().availableModules.map((module) => module.identifier));
+        if ((state.enabled || "modules" in query) && state.modules.some((id) => !available.has(id))) throw new Error("Visitor selection contains an unavailable module; save a new selection");
+        visitorMode.saveVisitorMode(this.visitorModeFile, state);
+        this.visitorMode = state;
+        this.sendSocketNotification("VISITOR_MODE_STATE", this.getVisitorModeState());
+        this.sendResponse(response);
+      } catch (error) {
+        this.sendResponse(response, error);
+      }
+    });
+  },
+
   handleGetModules (query, response) {
     this.requireLiveState(response, () => {
       this.sendResponse(response, undefined, {query, data: this.configData.moduleData});
@@ -549,6 +580,7 @@ module.exports = NodeHelper.create({
       saves: (q, r) => this.handleGetSaves(q, r),
       defaultConfig: (q, r) => this.handleGetDefaultConfig(q, r),
       modules: (q, r) => this.handleGetModules(q, r),
+      visitorMode: (q, r) => this.requireLiveState(r, () => this.sendResponse(r, undefined, {query: q, data: this.getVisitorModeState()})),
       brightness: (q, r) => this.handleGetBrightness(q, r),
       temp: (q, r) => this.handleGetTemp(q, r),
       zoom: (q, r) => this.handleGetZoom(q, r),
@@ -928,6 +960,7 @@ module.exports = NodeHelper.create({
       ZOOM: (q, r) => this.handleSimpleValueNotification(q, r),
       BACKGROUND_COLOR: (q, r) => this.handleSimpleValueNotification(q, r),
       FONT_COLOR: (q, r) => this.handleSimpleValueNotification(q, r),
+      SET_VISITOR_MODE: (q, r) => this.handleVisitorMode(q, r),
       SAVE: (q, r) => this.handleSave(q, r),
       MODULE_DATA: (q, r) => this.handleModuleData(q, r),
       INSTALL: (q, r) => this.installModule(q.url, r, q),
@@ -1021,6 +1054,7 @@ module.exports = NodeHelper.create({
     if (settings) {
       this.sendSocketNotification("DEFAULT_SETTINGS", settings);
     }
+    this.sendSocketNotification("VISITOR_MODE_STATE", this.getVisitorModeState());
   },
 
   fillTemplates (data) {
