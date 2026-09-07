@@ -161,6 +161,12 @@ Module.register("MMM-Remote-Control", {
         this.handleModuleVisibility(notification, payload);
         break;
 
+      case "BLUR":
+      case "UNBLUR":
+      case "TOGGLE_BLUR":
+        this.handleModuleBlur(notification, payload);
+        break;
+
       case "NOTIFICATION":
         this.sendNotification(payload.notification, payload.payload ?? {});
         break;
@@ -262,6 +268,10 @@ Module.register("MMM-Remote-Control", {
       }
     });
 
+    for (const moduleDatum of moduleData) {
+      document.getElementById(moduleDatum.identifier)?.classList.toggle("remote-control-blurred", moduleDatum.blurred === true);
+    }
+
     this.setBrightness(payload.brightness);
     this.setTemp(payload.temp);
     this.setZoom(payload.zoom ?? 100);
@@ -296,6 +306,25 @@ Module.register("MMM-Remote-Control", {
         module.show(1000, () => {}, options);
       }
     }
+  },
+
+  /**
+   * Apply blur independently of module visibility and lock strings.
+   * @param {string} notification - Blur action
+   * @param {object} payload - Module identifier, name, array, or all
+   */
+  handleModuleBlur (notification, payload = {}) {
+    const modules = payload.module === "all"
+      ? MM.getModules()
+      : this.getModulesByFilter(payload.module);
+    for (const module of modules) {
+      const element = document.getElementById(module.identifier);
+      if (!element) continue;
+      const isBlurred = notification === "BLUR" ||
+        (notification === "TOGGLE_BLUR" && !element.classList.contains("remote-control-blurred"));
+      element.classList.toggle("remote-control-blurred", isBlurred);
+    }
+    this.sendCurrentData();
   },
 
   getDom () {
@@ -369,6 +398,7 @@ Module.register("MMM-Remote-Control", {
       const moduleData = {...module.data, hidden: module.hidden, lockStrings: module.lockStrings || [], urlPath: module.name.replaceAll("MMM-", "").replaceAll("-", "").toLowerCase(), config: module.config};
       const modulePrototype = Object.getPrototypeOf(module);
       moduleData.defaults = modulePrototype.defaults;
+      moduleData.blurred = document.getElementById(module.identifier)?.classList.contains("remote-control-blurred") ?? false;
       currentModuleData.push(moduleData);
     });
     const configData = {

@@ -389,3 +389,26 @@ describe("remote.js DOM smoke tests", () => {
     assert.equal(Remote.addModule, "");
   });
 });
+
+
+test("phone blur button targets its instance without triggering visibility", async () => {
+  const {setupRemote} = await import("./setup.mjs");
+  const remote = await setupRemote();
+  document.body.innerHTML = "<div id=\"visible-modules-results\"></div>";
+  remote.translations = {BLUR: "Blur", UNBLUR: "Unblur"};
+  remote.loadList = async () => ({data: [
+    {identifier: "calendar_1", name: "calendar", position: "top_left", lockStrings: [], blurred: false},
+    {identifier: "calendar_2", name: "calendar", position: "top_right", lockStrings: [], blurred: true}
+  ]});
+  const actions = [];
+  remote.action = (action, payload) => { actions.push({action, ...payload}); };
+  await remote.loadVisibleModules();
+  const buttons = document.querySelectorAll(".module-blur-button");
+  assert.equal(buttons.length, 2);
+  assert.equal(buttons[1].textContent, "Unblur");
+  buttons[0].click();
+  assert.deepEqual(actions, [{action: "BLUR", module: "calendar_1"}]);
+  assert.equal(buttons[0].getAttribute("aria-pressed"), "true");
+  buttons[0].click();
+  assert.deepEqual(actions[1], {action: "UNBLUR", module: "calendar_1"});
+});

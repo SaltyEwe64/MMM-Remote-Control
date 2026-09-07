@@ -107,3 +107,56 @@ describe("MMM-Remote-Control.js module", () => {
     });
   });
 });
+
+
+test("blur targets instances, survives content updates, and preserves visibility", () => {
+  const window = new Window();
+  let definition;
+  const modules = ["calendar_1", "calendar_2", "missing"].map((identifier) => ({
+    identifier,
+    name: "calendar",
+    data: {identifier},
+    hidden: true,
+    lockStrings: ["other-module"],
+    hide: () => assert.fail("blur must not hide"),
+    show: () => assert.fail("blur must not show")
+  }));
+  modules.enumerate = (callback) => { for (const module of modules) callback(module); };
+  window.Module = {register: (_name, value) => { definition = value; }};
+  window.MM = {getModules: () => modules};
+  window.Log = {debug: () => {}};
+  vm.runInContext(fs.readFileSync(path.join(__dirname, "../../MMM-Remote-Control.js"), "utf8"), vm.createContext(window));
+  window.document.body.innerHTML = "<div id=\"calendar_1\"><h2>Private</h2></div><div id=\"calendar_2\"></div>";
+  let status;
+  definition.sendSocketNotification = (_notification, payload) => { status = payload; };
+  definition.socketNotificationReceived("BLUR", {module: "calendar_1"});
+  const first = window.document.getElementById("calendar_1");
+  const second = window.document.getElementById("calendar_2");
+  assert.ok(first.classList.contains("remote-control-blurred"));
+  assert.equal(second.classList.contains("remote-control-blurred"), false);
+  first.innerHTML = "Updated calendar";
+  assert.ok(first.classList.contains("remote-control-blurred"));
+  assert.equal(status.moduleData[0].blurred, true);
+  assert.equal(status.moduleData[2].blurred, false);
+  definition.socketNotificationReceived("BLUR", {module: "calendar_1"});
+  assert.ok(first.classList.contains("remote-control-blurred"));
+  definition.socketNotificationReceived("TOGGLE_BLUR", {module: ["calendar_1", "calendar_2"]});
+  assert.equal(first.classList.contains("remote-control-blurred"), false);
+  assert.ok(second.classList.contains("remote-control-blurred"));
+  definition.socketNotificationReceived("BLUR", {module: "calendar"});
+  assert.ok(first.classList.contains("remote-control-blurred"));
+  definition.socketNotificationReceived("UNBLUR", {module: "all"});
+  assert.equal(second.classList.contains("remote-control-blurred"), false);
+  definition.handleModuleBlur("BLUR");
+  definition.handleModuleBlur("BLUR", {module: "unknown"});
+  for (const module of modules) {
+    assert.equal(module.hidden, true);
+    assert.deepEqual(module.lockStrings, ["other-module"]);
+  }
+  for (const method of ["setBrightness", "setTemp", "setZoom", "setBackgroundColor", "setFontColor"]) definition[method] = () => {};
+  definition.handleDefaultSettings({settingsVersion: 2, moduleData: [{identifier: "calendar_1", blurred: true}]});
+  assert.ok(first.classList.contains("remote-control-blurred"));
+  definition.handleDefaultSettings({settingsVersion: 2, moduleData: [{identifier: "calendar_1"}]});
+  assert.equal(first.classList.contains("remote-control-blurred"), false);
+  window.close();
+});

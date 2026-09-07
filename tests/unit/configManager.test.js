@@ -293,6 +293,7 @@ describe("configManager.saveDefaultSettings", () => {
           hidden: false,
           lockStrings: [],
           urlPath: "clock",
+          blurred: true,
           extraField: "should be removed"
         }
       ],
@@ -308,6 +309,7 @@ describe("configManager.saveDefaultSettings", () => {
 
     assert.ok(savedPath.includes("settings.json"));
     const parsed = JSON.parse(savedContent);
+    assert.equal(parsed.moduleData[0].blurred, true);
     assert.equal(parsed.brightness, 75);
     assert.equal(parsed.temp, 22);
     assert.equal(parsed.zoom, 90);

@@ -84,5 +84,7 @@
   "FORM_NOTIFICATION_NAME_MISSING": "Lütfen bir bildirim adı girin.",
   "FORM_NOTIFICATION_PAYLOAD": "Payload (JSON veya dize, isteğe bağlı):",
   "FORM_NOTIFICATION_PAYLOAD_PLACEHOLDER": "{\"key\": \"value\"}",
-  "FORM_NOTIFICATION_URL": "API URL:"
+  "FORM_NOTIFICATION_URL": "API URL:",
+  "BLUR": "Blur",
+  "UNBLUR": "Unblur"
 }

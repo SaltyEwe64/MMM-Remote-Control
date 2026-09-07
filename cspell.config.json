@@ -103,7 +103,8 @@
     "xrandr",
     "xset",
     "xsmall",
-    "YOURAPIKEY"
+    "YOURAPIKEY",
+    "unblur"
   ],
   "ignorePaths": [
     "coverage/**",

@@ -243,3 +243,20 @@ describe("Module API", () => {
     assert.equal(captured.response.data[0].name, "clock");
   });
 });
+
+
+for (const action of ["blur", "unblur", "toggle_blur"]) {
+  test(action + " routes each calendar instance through executeQuery", () => {
+    const queries = [];
+    const context = makeContext({
+      configData: {moduleData: [{identifier: "calendar_1", name: "calendar"}, {identifier: "calendar_2", name: "calendar"}]},
+      checkDelay: (query) => query,
+      executeQuery: (query, _response, skip) => { queries.push({query, skip}); }
+    });
+    apiModule.answerModuleApi.call(context, {params: {moduleName: "calendar", action}}, {json: () => {}});
+    assert.deepEqual(queries, [
+      {query: {module: "calendar_1", action: action.toUpperCase()}, skip: true},
+      {query: {module: "calendar_2", action: action.toUpperCase()}, skip: false}
+    ]);
+  });
+}

@@ -84,5 +84,7 @@
   "FORM_SECONDS": "Seconds:",
   "RESPONSE_ERROR": "Well that didn't work. Check the MM logs for more details.",
   "MODULE_CONTROLS": "Module Controls",
-  "CUSTOM_MENU": "My Custom Menu"
+  "CUSTOM_MENU": "My Custom Menu",
+  "BLUR": "Blur",
+  "UNBLUR": "Unblur"
 }

@@ -331,3 +331,17 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) f
 ## Changelog
 
 All notable changes to this project will be documented in the [CHANGELOG.md](CHANGELOG.md) file.
+
+## Module privacy blur
+
+Open the remote control on your phone and use the **Blur** / **Unblur** button beside each module in the visibility menu. Each button targets that individual module instance, including calendars with the same module name. Blurring keeps the module in place and does not change Hide/Show or visibility locks.
+
+Use **Save** in the existing remote settings controls to restore the current blur selection after a mirror reload. Without saving, blur lasts until the mirror reloads. Older saved settings load with blur off.
+
+The remote actions `BLUR`, `UNBLUR`, and `TOGGLE_BLUR` accept a `module` identifier, module name, array of identifiers/names, or `all`. For example:
+
+```javascript
+this.sendNotification("REMOTE_ACTION", {action: "BLUR", module: "calendar"});
+```
+
+The existing authenticated API also supports `/api/module/<identifier>/blur`, `/unblur`, and `/toggle_blur`. Blur applies to the outer module wrapper, including its header, and survives internal content updates. It is visual obscuring, not access control; use Hide for content that must not be readable.

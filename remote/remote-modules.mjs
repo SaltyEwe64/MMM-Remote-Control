@@ -218,6 +218,22 @@ Object.assign(
             stack,
             text
           );
+          const blurButton = document.createElement("button");
+          blurButton.type = "button";
+          blurButton.className = "button module-blur-button";
+          blurButton.setAttribute("aria-pressed", String(Boolean(module.blurred)));
+          const updateBlurLabel = () => {
+            blurButton.textContent = module.blurred ? this.translate("UNBLUR") : this.translate("BLUR");
+            blurButton.setAttribute("aria-pressed", String(Boolean(module.blurred)));
+          };
+          updateBlurLabel();
+          blurButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            module.blurred = !module.blurred;
+            this.action(module.blurred ? "BLUR" : "UNBLUR", {module: module.identifier});
+            updateBlurLabel();
+          });
+          moduleLine.append(blurButton);
           parent.append(moduleLine);
           this.makeToggleButton(
             parent.lastElementChild,

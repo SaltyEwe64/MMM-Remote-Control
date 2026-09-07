@@ -84,5 +84,7 @@
   "FORM_NOTIFICATION_NAME_MISSING": "请输入通知名称。",
   "FORM_NOTIFICATION_PAYLOAD": "Payload (JSON 或字符串, 可选):",
   "FORM_NOTIFICATION_PAYLOAD_PLACEHOLDER": "{\"key\": \"value\"}",
-  "FORM_NOTIFICATION_URL": "API URL:"
+  "FORM_NOTIFICATION_URL": "API URL:",
+  "BLUR": "Blur",
+  "UNBLUR": "Unblur"
 }
