@@ -105,11 +105,24 @@ Object.assign(Remote, {
 
   /**
    * Returns HTML for the main menu (navigation buttons only).
+   * @param {boolean} showSelection - Include the module selection editor
    * @returns {string} HTML string for the main menu nav
    */
+  renderVisitorModePanel (showSelection) {
+    const t = (key) => this.translate(key);
+    return `<section class="visitor-mode-panel">
+      <button type="button" class="button visitor-mode-toggle" aria-pressed="false" disabled>${t("VISITOR_MODE_OFF")}</button>
+      ${showSelection ? `<details><summary>${t("VISITOR_CHOOSE_MODULES")}</summary>
+        <p>${t("VISITOR_SELECTION_HELP")}</p>
+        <div data-visitor-modules></div>
+        <button type="button" class="button visitor-mode-save" disabled>${t("VISITOR_SAVE_SELECTION")}</button>
+      </details>` : `<button type="button" class="button visitor-mode-configure">${t("VISITOR_CHOOSE_MODULES")}</button>`}
+    </section>`;
+  },
+
   renderMainMenu () {
     const t = (key) => this.translate(key);
-    return `<nav class="menu-nav">
+    return `${this.renderVisitorModePanel(false)}<nav class="menu-nav">
         ${navButton("power-button", "fa-power-off", t("SHUTDOWN_MENU_NAME"), true, "power-menu")}
         ${stackButton("edit-button", "fa-television", "fa-pencil", t("EDIT_MENU_NAME"), true, "edit-menu")}
         ${navButton("settings-button", "fa-wrench", t("CONFIGURE_MENU_NAME"), true, "settings-menu")}
@@ -328,7 +341,7 @@ Object.assign(Remote, {
   renderEditMenuContent () {
     const t = (key) => this.translate(key);
 
-    return `<div class="menu-element-container">
+    return `${this.renderVisitorModePanel(true)}<div class="menu-element-container">
         <div class="action-buttons-row">
           <div id="save-button" class="button" role="button" aria-label="${t("SAVE")}" tabindex="0">
             <span class="fa fa-fw fa-save" aria-hidden="true"></span>

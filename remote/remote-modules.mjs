@@ -10,6 +10,54 @@ Object.assign(
   Remote,
   {
 
+    loadVisitorMode () {
+      this.getData("visitorMode");
+      for (const button of document.querySelectorAll(".visitor-mode-configure")) {
+        if (button.dataset.visitorBound) {
+          continue;
+        }
+
+        button.dataset.visitorBound = "true";
+        button.addEventListener("click", () => this.navigateToMenu("edit-menu"));
+      }
+    },
+
+    updateVisitorModeControls (state) {
+      this.visitorMode = state;
+      for (const button of document.querySelectorAll(".visitor-mode-toggle")) {
+        button.textContent = state.enabled ? this.translate("VISITOR_MODE_ON") : this.translate("VISITOR_MODE_OFF");
+        button.setAttribute("aria-pressed", String(state.enabled));
+        button.disabled = !state.enabled && state.modules.length === 0;
+        if (!button.dataset.visitorBound) {
+          button.dataset.visitorBound = "true";
+          button.addEventListener("click", () => this.action("SET_VISITOR_MODE", {enabled: !this.visitorMode.enabled}));
+        }
+      }
+      for (const container of document.querySelectorAll("[data-visitor-modules]")) {
+        container.replaceChildren();
+        for (const module of state.availableModules) {
+          const label = document.createElement("label");
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.value = module.identifier;
+          checkbox.checked = state.modules.includes(module.identifier);
+          label.append(checkbox, document.createTextNode(module.header ? module.name + " — " + module.header : module.name + " (" + module.position + ")"));
+          container.append(label);
+        }
+        const save = container.closest(".visitor-mode-panel").querySelector(".visitor-mode-save");
+        save.disabled = false;
+        if (save.dataset.visitorBound) continue;
+        save.dataset.visitorBound = "true";
+        save.addEventListener("click", () => {
+          const modules = [...container.querySelectorAll("input:checked")].map((input) => input.value);
+          this.action("SET_VISITOR_MODE", {modules, enabled: modules.length > 0 && this.visitorMode.enabled});
+        });
+      }
+      for (const button of document.querySelectorAll(".module-blur-button")) {
+        button.disabled = state.enabled && state.modules.includes(button.closest(".module-line").id);
+      }
+    },
+
     showModule (id, force) {
 
       this.action("SHOW", force ? {"force": true, "module": id} : {"module": id});
@@ -220,6 +268,7 @@ Object.assign(
           );
           const blurButton = document.createElement("button");
           blurButton.type = "button";
+          blurButton.disabled = Boolean(module.visitorBlurred);
           blurButton.className = "button module-blur-button";
           blurButton.setAttribute("aria-pressed", String(Boolean(module.blurred)));
           const updateBlurLabel = () => {

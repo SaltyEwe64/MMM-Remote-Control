@@ -1352,3 +1352,38 @@ pre {
   border: 1px solid currentcolor;
   border-radius: 6px;
 }
+
+.visitor-mode-panel {
+  margin: 1rem auto;
+  padding: 1rem;
+  max-width: 440px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius);
+}
+.visitor-mode-panel button {
+  font: inherit;
+  color: inherit;
+  background: var(--glass-bg);
+  min-height: 44px;
+}
+.visitor-mode-panel label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 44px;
+  text-align: left;
+}
+.visitor-mode-panel input[type="checkbox"] {
+  opacity: 1;
+  position: static;
+  appearance: auto;
+  accent-color: #69baff;
+  margin: 0;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+}
+.visitor-mode-toggle[aria-pressed="true"] {
+  border-color: currentcolor;
+  font-weight: bold;
+}

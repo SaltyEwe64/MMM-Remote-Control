@@ -161,6 +161,10 @@ Module.register("MMM-Remote-Control", {
         this.handleModuleVisibility(notification, payload);
         break;
 
+      case "VISITOR_MODE_STATE":
+        this.applyVisitorMode(payload);
+        break;
+
       case "BLUR":
       case "UNBLUR":
       case "TOGGLE_BLUR":
@@ -327,6 +331,18 @@ Module.register("MMM-Remote-Control", {
     this.sendCurrentData();
   },
 
+  /**
+   * Apply the visitor preset without changing manual blur or visibility.
+   * @param {object} state - Saved visitor selection and enabled flag
+   */
+  applyVisitorMode (state) {
+    const selected = new Set(state.modules);
+    for (const module of MM.getModules()) {
+      document.getElementById(module.identifier)?.classList.toggle("remote-control-visitor-blurred", state.enabled && selected.has(module.identifier));
+    }
+    this.sendCurrentData();
+  },
+
   getDom () {
     const wrapper = document.createElement("div");
     let portToShow;
@@ -399,6 +415,7 @@ Module.register("MMM-Remote-Control", {
       const modulePrototype = Object.getPrototypeOf(module);
       moduleData.defaults = modulePrototype.defaults;
       moduleData.blurred = document.getElementById(module.identifier)?.classList.contains("remote-control-blurred") ?? false;
+      moduleData.visitorBlurred = document.getElementById(module.identifier)?.classList.contains("remote-control-visitor-blurred") ?? false;
       currentModuleData.push(moduleData);
     });
     const configData = {

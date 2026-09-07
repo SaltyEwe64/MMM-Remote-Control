@@ -31,8 +31,9 @@
   margin: 0.3em 0;
 }
 
-.remote-control-blurred {
-  filter: blur(14px);
+.remote-control-blurred,
+.remote-control-visitor-blurred {
+  filter: blur(6px);
   pointer-events: none;
   user-select: none;
 }
