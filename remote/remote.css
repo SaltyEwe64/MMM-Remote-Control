@@ -1342,3 +1342,13 @@ pre {
   border-color: #ff9800;
   background: rgba(255, 152, 0, 0.15);
 }
+
+.module-blur-button {
+  margin-left: 1rem;
+  min-height: 44px;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 1px solid currentcolor;
+  border-radius: 6px;
+}

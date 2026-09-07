@@ -446,7 +446,7 @@ module.exports = {
 
     let action = request.params.action.toUpperCase();
 
-    if (["SHOW", "HIDE", "FORCE", "TOGGLE", "DEFAULTS"].includes(action)) { // /api/modules part of the code
+    if (["SHOW", "HIDE", "FORCE", "TOGGLE", "BLUR", "UNBLUR", "TOGGLE_BLUR", "DEFAULTS"].includes(action)) { // /api/modules part of the code
       if (action === "DEFAULTS") {
         this.answerGet({data: "defaultConfig", module: request.params.moduleName}, response);
         return;

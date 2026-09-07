@@ -700,7 +700,9 @@
                     "FORM_NOTIFICATION_NAME_MISSING": "Please enter a notification name.",
                     "FORM_NOTIFICATION_PAYLOAD": "Payload (JSON or string, optional):",
                     "FORM_NOTIFICATION_PAYLOAD_PLACEHOLDER": "{\"key\": \"value\"}",
-                    "FORM_NOTIFICATION_URL": "API URL:"
+                    "FORM_NOTIFICATION_URL": "API URL:",
+                    "BLUR": "Blur",
+                    "UNBLUR": "Unblur"
                   }
                 }
               }
@@ -1026,7 +1028,7 @@
             "in": "path",
             "required": true,
             "allowEmptyValue": true,
-            "description": "The action to execute (e.g., show, hide, toggle)",
+            "description": "The action to execute (e.g., show, hide, toggle, blur, unblur, toggle_blur)",
             "schema": {
               "type": "string"
             }

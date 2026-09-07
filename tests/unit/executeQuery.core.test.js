@@ -312,3 +312,14 @@ describe("executeQuery state and value actions", () => {
     assert.equal(h.__sent[0].payload, 9000);
   });
 });
+
+
+for (const action of ["BLUR", "UNBLUR", "TOGGLE_BLUR"]) {
+  test(action + " is forwarded to the mirror", () => {
+    const helper = freshHelper();
+    const query = {action, module: ["calendar_1", "calendar_2"]};
+    assert.equal(helper.executeQuery(query, {}), true);
+    assert.deepEqual(helper.__sent, [{what: action, payload: query}]);
+    assert.equal(helper.__responses.length, 1);
+  });
+}

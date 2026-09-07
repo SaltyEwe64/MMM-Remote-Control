@@ -84,5 +84,7 @@
   "FORM_NOTIFICATION_NAME_MISSING": "Indtast venligst et navn til notifikationen.",
   "FORM_NOTIFICATION_PAYLOAD": "Payload (JSON eller streng, valgfri):",
   "FORM_NOTIFICATION_PAYLOAD_PLACEHOLDER": "{\"key\": \"value\"}",
-  "FORM_NOTIFICATION_URL": "API URL:"
+  "FORM_NOTIFICATION_URL": "API URL:",
+  "BLUR": "Blur",
+  "UNBLUR": "Unblur"
 }

@@ -84,5 +84,7 @@
   "FORM_NOTIFICATION_NAME_MISSING": "Si us plau, introdueix un nom per a la notificació.",
   "FORM_NOTIFICATION_PAYLOAD": "Payload (JSON o cadena, opcional):",
   "FORM_NOTIFICATION_PAYLOAD_PLACEHOLDER": "{\"key\": \"value\"}",
-  "FORM_NOTIFICATION_URL": "API URL:"
+  "FORM_NOTIFICATION_URL": "API URL:",
+  "BLUR": "Blur",
+  "UNBLUR": "Unblur"
 }
